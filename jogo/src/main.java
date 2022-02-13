@@ -6,7 +6,7 @@ import java.nio.file.Watchable;
 
 public class main {
     public static void main(String[] args) throws InterruptedException {
-        Game game = new Game(900,700);
+        Game game = new Game();
 
         Keyboard kb = new Keyboard(game);
 
@@ -39,6 +39,16 @@ public class main {
         shiftKey.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
         shiftKey.setKey(KeyboardEvent.KEY_SHIFT);
         kb.addEventListener(shiftKey);
+
+        KeyboardEvent pKey= new KeyboardEvent();
+        pKey.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        pKey.setKey(KeyboardEvent.KEY_P);
+        kb.addEventListener(pKey);
+
+        KeyboardEvent escKey= new KeyboardEvent();
+        escKey.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        escKey.setKey(KeyboardEvent.KEY_ESC);
+        kb.addEventListener(escKey);
 
         game.init();
         game.start();

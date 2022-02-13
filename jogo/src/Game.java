@@ -1,6 +1,6 @@
 import org.academiadecodigo.simplegraphics.graphics.Color;
-import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
@@ -9,33 +9,54 @@ import java.util.ArrayList;
 
 
 public class Game implements KeyboardHandler {
-    private int delete;
-    private Rectangle background;
+    //STATES
+    private final Text gamePaused;
+    private final Text gameOver;
+    private final Text gameOver2;
+    private final Rectangle blackScreen;
+    private final int playsState = 0;
+    private final int overState = 1;
+    private final int pauseState = 2;
+    private final int resetState = 3;
+    private int gameState;
+    private final Picture background;
     //// player ship logic
-    private Picture player1ship;
-    private Picture player2ship;
+    private final Picture player1ship;
+    private final Picture player2ship;
     ///players
-    private Players[] players = {
-            new Players(),
-            new Players()
+    private final Players[] players = {
+            new Players("Player 1"),
+            new Players("Player 2")
     };
     //asteroids
-    private ArrayList<Asteroids> asteroids = new ArrayList<>();
+    private final ArrayList<Asteroids> asteroids = new ArrayList<>();
     //bullets
-    private ArrayList<Bullets> bullets = new ArrayList<>();
+    private final ArrayList<Bullets> bullets1 = new ArrayList<>();
+    private final ArrayList<Bullets> bullets2 = new ArrayList<>();
 
     public static int PADDING = 10;
 
-    public Game(int x, int y) {
+    public Game() {
         //// bg
-        background = new Rectangle(PADDING, PADDING, x, y);
-        background.fill();
-        background.setColor(Color.BLACK);
+        background = new Picture(PADDING, PADDING, "resources/background.png");
+        background.draw();
         ///playerships
-        player1ship = new Picture(background.getWidth() / 2, PADDING, "resources/player2ship.png");
-        player2ship = new Picture(background.getWidth() / 2, (background.getHeight() + PADDING) - 50, "resources/player1ship.png");
+        player1ship = new Picture(background.getWidth() / 2, PADDING + 11, "resources/player2ship.png");
+        player2ship = new Picture(background.getWidth() / 2, (background.getHeight() + 1) - 50, "resources/player1ship.png");
         player2ship.draw();
         player1ship.draw();
+        //states
+        gameState = playsState;
+        gamePaused = new Text((background.getWidth() / 2) - PADDING, background.getHeight() / 2, "GAME PAUSED");
+        gamePaused.setColor(Color.WHITE);
+        gamePaused.grow(50, 20);
+        gameOver = new Text((background.getWidth() / 2) - PADDING, background.getHeight() / 2, "GAME OVER");
+        gameOver.setColor(Color.WHITE);
+        gameOver.grow(50, 20);
+        gameOver2 = new Text((background.getWidth() / 2) - 6, gameOver.getY() + 50, "Press ESC to restart");
+        gameOver2.setColor(Color.WHITE);
+        gameOver2.grow(40, 10);
+        blackScreen = new Rectangle(PADDING, PADDING, background.getWidth(), background.getHeight());
     }
 
     public void init() {
@@ -54,101 +75,146 @@ public class Game implements KeyboardHandler {
             } else {
                 direction = Direction.RIGHT;
             }
-            if(direction == Direction.LEFT){
+            if (direction == Direction.LEFT) {
                 x = background.getWidth();
-            }else{
+            } else {
                 x = background.getX();
             }
 
-            asteroids.add(new Asteroids(x, y, 25, 25, direction));
-            asteroids.get(i).fill();
-            asteroids.get(i).setColor(Color.RED);
+            asteroids.add(new Asteroids(x, y, "resources/asteroides.png", direction));
+            asteroids.get(i).draw();
         }
     }
 
 
     public void start() throws InterruptedException {
-
         while (true) {
 
             // Pause for a while
-            Thread.sleep(50);
+            Thread.sleep(20);
+            if(players[0].isDead() || players[1].isDead()){
+                gameState = overState;
+                blackScreen.fill();
+                gameOver.draw();
+                gameOver2.draw();
+            }
 
-            // Move asteroids && bullets
-            moveObjects();
 
-            //check asteroid && bullet limits
-            checkLimit();
+            if (gameState == playsState) {
+                // Move asteroids && bullets
+                moveObjects();
 
-            //check bullet collisions
-            checkCollisions();
+                //check asteroid && bullet limits
+                checkLimit();
+
+                //check bullet collisions
+                checkCollisions();
+            }
+
         }
 
     }
 
 
     public void checkLimit() {
-        Bullets toremoveB = null;
-        for (int i = 0; i < asteroids.size(); i++) {
-            if (asteroids.get(i).getX() >= background.getWidth() - 50){
-                asteroids.get(i).setDirection(Direction.LEFT);
+        Bullets toremoveB1= null;
+        Bullets toremoveB2 = null;
+        for (Asteroids asteroid : asteroids) {
+            if (asteroid.getX() >= background.getWidth() - 50) {
+                asteroid.setDirection(Direction.LEFT);
             }
-            if(asteroids.get(i).getX() <= background.getX() + 20) {
-                asteroids.get(i).setDirection(Direction.RIGHT);
+            if (asteroid.getX() <= background.getX() + 20) {
+                asteroid.setDirection(Direction.RIGHT);
             }
         }
 
-        for (int i = 0; i < bullets.size(); i++) {
-            if ((bullets.get(i).getY() >= background.getHeight() - 20)){
-                bullets.get(i).delete();
-                toremoveB = bullets.get(i);
+        for (Bullets bullet : bullets1) {
+            if ((bullet.getY() >= background.getHeight() - 20)) {
+                bullet.delete();
+                toremoveB1 = bullet;
             }
-            if(bullets.get(i).getY() <= background.getY() + 10) {
-                bullets.get(i).delete();
-                toremoveB = bullets.get(i);
+            if (bullet.getY() <= background.getY() + 10) {
+                bullet.delete();
+                toremoveB1 = bullet;
             }
         }
-        bullets.remove(toremoveB);
+
+        for (Bullets bullet : bullets2) {
+            if ((bullet.getY() >= background.getHeight() - 20)) {
+                bullet.delete();
+                toremoveB2 = bullet;
+            }
+            if (bullet.getY() <= background.getY() + 10) {
+                bullet.delete();
+                toremoveB2 = bullet;
+            }
+        }
+        bullets1.remove(toremoveB1);
+        bullets2.remove(toremoveB2);
     }
 
-    public void checkCollisions(){
-        ArrayList<Asteroids> toRemoveA = new ArrayList<>();
-        ArrayList<Bullets> toRemoveB = new ArrayList<>();
-        Asteroids toremoveA = null;
-        for (int i = 0; i < bullets.size(); i++) {
-            for (int j = 0; j < asteroids.size(); j++){
-                if(bullets.get(i).intersects(asteroids.get(j))){
-                    toRemoveB.add(bullets.get(i));
-                    bullets.get(i).delete();
-                    toRemoveA.add(asteroids.get(j));
-                    asteroids.get(j).delete();
+    public void checkCollisions() throws InterruptedException {
+        Asteroids toRemoveA = null;
+        Bullets toRemoveB1 = null;
+        Bullets toRemoveB2 = null;
+
+        for (Bullets bullet : bullets1) {
+            for (Asteroids asteroid : asteroids) {
+                if (bullet.intersects(asteroid)) {
+                    toRemoveB1 = bullet;
+                    bullet.delete();
+                    toRemoveA = asteroid;
+                    asteroid.delete();
                 }
             }
         }
-        for (int i2 = 0; i2 < bullets.size(); i2++) {
-            for (int i3 = 0; i3 < toRemoveB.size(); i3++) {
-                if(bullets.get(i2).equals(toRemoveB.get(i3))){
-                    bullets.remove(i2);
+        for (Bullets bullet : bullets2) {
+            for (Asteroids asteroid : asteroids) {
+                if (bullet.intersects(asteroid)) {
+                    toRemoveB2 = bullet;
+                    bullet.delete();
+                    toRemoveA = asteroid;
+                    asteroid.delete();
                 }
             }
         }
 
-        for (int i4 = 0; i4 < asteroids.size(); i4++) {
-            for (int i5 = 0; i5 < toRemoveA.size(); i5++) {
-                if(asteroids.get(i4).equals(toRemoveA.get(i5))){
-                    toremoveA =  asteroids.get(i4);
-                }
+        for (Bullets bullet : bullets1) {
+            if (bullet.intersects(player2ship)) {
+                toRemoveB1 = bullet;
+                players[0].hit();
+                Thread.sleep(20);
+                bullet.delete();
+
             }
         }
-        
-        asteroids.remove(toremoveA);
-        if(asteroids.size() == 3){
+
+        for (Bullets bullet : bullets2) {
+            if (bullet.intersects(player1ship)) {
+                toRemoveB2 = bullet;
+                players[1].hit();
+                Thread.sleep(20);
+                bullet.delete();
+
+            }
+        }
+
+
+        bullets1.remove(toRemoveB1);
+        bullets2.remove(toRemoveB2);
+        asteroids.remove(toRemoveA);
+
+
+        if (asteroids.size() == 6) {
             createAsteroids();
         }
     }
 
     private void moveObjects() {
-        for (Bullets bullet : bullets) {
+        for (Bullets bullet : bullets1) {
+            bullet.move();
+        }
+        for (Bullets bullet : bullets2) {
             bullet.move();
         }
         for (Asteroids asteroid : asteroids) {
@@ -158,6 +224,7 @@ public class Game implements KeyboardHandler {
 
     @Override
     public void keyPressed(KeyboardEvent keyboardEvent) {
+        int pauseState = 1;
         switch (keyboardEvent.getKey()) {
             case KeyboardEvent.KEY_RIGHT:
                 if (!(player1ship.getMaxX() >= background.getWidth())) {
@@ -180,19 +247,42 @@ public class Game implements KeyboardHandler {
                 }
                 break;
             case KeyboardEvent.KEY_W:
-                bullets.add(new Bullets(player2ship.getX() + (player2ship.getWidth() / 2) - 5, player2ship.getY(), 10, 30));
-                    int i1 = bullets.size() - 1;
-                    bullets.get(i1).fill();
-                    bullets.get(i1).setColor(Color.BLUE);
-                    bullets.get(i1).setDirection(Direction.DOWN);
-                    break;
-                    case KeyboardEvent.KEY_SHIFT:
-                        bullets.add(new Bullets(player1ship.getX() + (player1ship.getWidth() / 2) - 5, player1ship.getY() + 20, 10, 30));
-                        int i2 = bullets.size() - 1;
-                        bullets.get(i2).fill();
-                        bullets.get(i2).setColor(Color.BLUE);
-                        bullets.get(i2).setDirection(Direction.UP);
-                        break;
+                if(bullets2.size() == 0 && gameState == playsState) {
+                    bullets2.add(new Bullets(player2ship.getX() + (player2ship.getWidth() / 2) - 5, player2ship.getY(), 10, 30, Direction.DOWN));
+                    bullets2.get(0).fill();
+                    bullets2.get(0).setColor(Color.RED);
+                }
+                break;
+            case KeyboardEvent.KEY_SHIFT:
+                if(bullets1.size() == 0 && gameState == playsState) {
+                    bullets1.add(new Bullets(player1ship.getX() + (player1ship.getWidth() / 2) - 5, player1ship.getY() + 20, 10, 30, Direction.UP));
+                    bullets1.get(0).fill();
+                    bullets1.get(0).setColor(Color.CYAN);
+                }
+                break;
+            case KeyboardEvent.KEY_P:
+                if (gameState == playsState) {
+                    gameState = pauseState;
+                    gamePaused.draw();
+                    System.out.println("Game paused");
+                } else if (gameState == pauseState) {
+                    gamePaused.delete();
+                    gameState = playsState;
+                    System.out.println("Game resumed");
+                }
+                break;
+            case KeyboardEvent.KEY_ESC:
+                if(gameState == overState) {
+                    players[0].setDead(false);
+                    players[0].resetHp();
+                    players[1].setDead(false);
+                    players[1].resetHp();
+                    blackScreen.delete();
+                    gameOver2.delete();
+                    gameOver.delete();
+                    gameState = playsState;
+                }
+                break;
         }
     }
 

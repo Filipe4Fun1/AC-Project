@@ -1,20 +1,14 @@
 import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 
 public class Bullets extends Rectangle {
-    private int speed = 50;
+    private int speed = 30;
     private Direction direction;
 
-    public Bullets(double v, double v1, double v2, double v3) {
+    public Bullets(double v, double v1, double v2, double v3, Direction d) {
         super(v, v1, v2, v3);
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    public Direction getDirection() {
-        return direction;
+        direction = d;
     }
 
 
@@ -29,18 +23,18 @@ public class Bullets extends Rectangle {
         }
     }
 
-    public boolean intersects(Ellipse ellipse) {
+    public boolean intersects(Picture pic) {
         int tw = getWidth();
         int th = getHeight();
-        int ew = ellipse.getWidth();
-        int eh = ellipse.getHeight();
+        int ew = pic.getWidth();
+        int eh = pic.getHeight();
         if (ew <= 0 || eh <= 0 || tw <= 0 || th <= 0) {
             return false;
         }
         int tx = getX();
         int ty = getY();
-        int rx = ellipse.getX();
-        int ry = ellipse.getY();
+        int rx = pic.getX();
+        int ry = pic.getY();
         ew += rx;
         eh += ry;
         tw += tx;

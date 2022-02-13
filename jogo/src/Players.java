@@ -2,7 +2,7 @@
 
 public class Players{
     private String name;
-    private int hitpoints = 1;
+    private int hitpoints = 5;
     private boolean isDead;
 
     public Players(String name){
@@ -18,7 +18,7 @@ public class Players{
     }
 
     public void resetHp(){
-        hitpoints = 10;
+        hitpoints = 5;
     }
     public boolean isDead() {
         return isDead;

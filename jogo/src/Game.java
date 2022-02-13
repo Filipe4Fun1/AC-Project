@@ -10,50 +10,60 @@ import java.util.ArrayList;
 
 public class Game implements KeyboardHandler {
     //STATES
-    private final Text gamePaused;
-    private final Text gameOver;
-    private final Text gameOver2;
-    private final Rectangle blackScreen;
     private final int playsState = 0;
     private final int overState = 1;
     private final int pauseState = 2;
-    private final int resetState = 3;
     private int gameState;
+
+    //SHAPES
     private final Picture background;
-    //// player ship logic
+    private final Text gamePaused;
+    private final Text gameOverP1;
+    private final Text gameOverP2;
+    private final Text gameOver2;
+    private final Rectangle blackScreen;
     private final Picture player1ship;
     private final Picture player2ship;
+    public static int PADDING = 10;
+
     ///players
     private final Players[] players = {
             new Players("Player 1"),
             new Players("Player 2")
     };
+    private Players winner = players[0];
+
     //asteroids
     private final ArrayList<Asteroids> asteroids = new ArrayList<>();
+
     //bullets
     private final ArrayList<Bullets> bullets1 = new ArrayList<>();
     private final ArrayList<Bullets> bullets2 = new ArrayList<>();
 
-    public static int PADDING = 10;
 
     public Game() {
         //// bg
         background = new Picture(PADDING, PADDING, "resources/background.png");
         background.draw();
+        gameState = playsState;
+
         ///playerships
         player1ship = new Picture(background.getWidth() / 2, PADDING + 11, "resources/player2ship.png");
         player2ship = new Picture(background.getWidth() / 2, (background.getHeight() + 1) - 50, "resources/player1ship.png");
         player2ship.draw();
         player1ship.draw();
-        //states
-        gameState = playsState;
+
+        //shapes
         gamePaused = new Text((background.getWidth() / 2) - PADDING, background.getHeight() / 2, "GAME PAUSED");
         gamePaused.setColor(Color.WHITE);
         gamePaused.grow(50, 20);
-        gameOver = new Text((background.getWidth() / 2) - PADDING, background.getHeight() / 2, "GAME OVER");
-        gameOver.setColor(Color.WHITE);
-        gameOver.grow(50, 20);
-        gameOver2 = new Text((background.getWidth() / 2) - 6, gameOver.getY() + 50, "Press ESC to restart");
+        gameOverP1 = new Text((background.getWidth() / 2) + 5, background.getHeight() / 2, "CYAN PLAYER WON!");
+        gameOverP1.setColor(Color.WHITE);
+        gameOverP1.grow(50, 20);
+        gameOverP2 = new Text((background.getWidth() / 2) + 8, background.getHeight() / 2, "RED PLAYER WON!");
+        gameOverP2.setColor(Color.WHITE);
+        gameOverP2.grow(50, 20);
+        gameOver2 = new Text((background.getWidth() / 2) - 6, gameOverP1.getY() + 50, "Press ESC to restart");
         gameOver2.setColor(Color.WHITE);
         gameOver2.grow(40, 10);
         blackScreen = new Rectangle(PADDING, PADDING, background.getWidth(), background.getHeight());
@@ -92,10 +102,15 @@ public class Game implements KeyboardHandler {
 
             // Pause for a while
             Thread.sleep(20);
-            if(players[0].isDead() || players[1].isDead()){
+            if(players[0].isDead()){
                 gameState = overState;
                 blackScreen.fill();
-                gameOver.draw();
+                gameOverP1.draw();
+                gameOver2.draw();
+            }else if(players[1].isDead()){
+                gameState = overState;
+                blackScreen.fill();
+                gameOverP2.draw();
                 gameOver2.draw();
             }
 
@@ -224,7 +239,6 @@ public class Game implements KeyboardHandler {
 
     @Override
     public void keyPressed(KeyboardEvent keyboardEvent) {
-        int pauseState = 1;
         switch (keyboardEvent.getKey()) {
             case KeyboardEvent.KEY_RIGHT:
                 if (!(player1ship.getMaxX() >= background.getWidth())) {
@@ -279,7 +293,8 @@ public class Game implements KeyboardHandler {
                     players[1].resetHp();
                     blackScreen.delete();
                     gameOver2.delete();
-                    gameOver.delete();
+                    gameOverP1.delete();
+                    gameOverP2.delete();
                     gameState = playsState;
                 }
                 break;

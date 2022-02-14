@@ -1,4 +1,6 @@
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 
+import java.util.ArrayList;
 
 public class Players{
     private String name;

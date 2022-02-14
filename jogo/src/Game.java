@@ -4,11 +4,11 @@ import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
-
 import java.util.ArrayList;
 
 
 public class Game implements KeyboardHandler {
+    Sound sound = new Sound();
     //STATES
     private final int playsState = 0;
     private final int overState = 1;
@@ -32,6 +32,8 @@ public class Game implements KeyboardHandler {
             new Players("Player 2")
     };
     private Players winner = players[0];
+    private ArrayList<Hearts> heartsP1 = new ArrayList<>();
+    private ArrayList<Hearts> heartsP2 = new ArrayList<>();
 
     //asteroids
     private final ArrayList<Asteroids> asteroids = new ArrayList<>();
@@ -58,10 +60,10 @@ public class Game implements KeyboardHandler {
         gamePaused.setColor(Color.WHITE);
         gamePaused.grow(50, 20);
         gameOverP1 = new Text((background.getWidth() / 2) + 5, background.getHeight() / 2, "CYAN PLAYER WON!");
-        gameOverP1.setColor(Color.WHITE);
+        gameOverP1.setColor(Color.CYAN);
         gameOverP1.grow(50, 20);
         gameOverP2 = new Text((background.getWidth() / 2) + 8, background.getHeight() / 2, "RED PLAYER WON!");
-        gameOverP2.setColor(Color.WHITE);
+        gameOverP2.setColor(Color.RED);
         gameOverP2.grow(50, 20);
         gameOver2 = new Text((background.getWidth() / 2) - 6, gameOverP1.getY() + 50, "Press ESC to restart");
         gameOver2.setColor(Color.WHITE);
@@ -70,7 +72,9 @@ public class Game implements KeyboardHandler {
     }
 
     public void init() {
+        sound.bgMusic();
         createAsteroids();
+        createHearts();
     }
 
     private void createAsteroids() {
@@ -96,18 +100,45 @@ public class Game implements KeyboardHandler {
         }
     }
 
+    private void createHearts() {
+        int x = 20;
+        for (int i = 0; i < 5; i++) {
+            heartsP2.add(new Hearts(background.getX() + x, background.getHeight() - 20 , "resources/heart.png"));
+            heartsP2.get(i).draw();
+            x +=22;
+        }
+
+        for (int i = 0; i < 5; i++) {
+            heartsP1.add(new Hearts(background.getWidth() - x, background.getY() + PADDING, "resources/heart.png"));
+            heartsP1.get(i).draw();
+            x -=22;
+        }
+    }
+
 
     public void start() throws InterruptedException {
+        boolean gameOverSound = false;
         while (true) {
+
 
             // Pause for a while
             Thread.sleep(20);
             if(players[0].isDead()){
+                if(!gameOverSound){
+                    sound.gameOverSound();
+                    gameOverSound = true;
+                    sound.setGameover(true);
+                }
                 gameState = overState;
                 blackScreen.fill();
                 gameOverP1.draw();
                 gameOver2.draw();
             }else if(players[1].isDead()){
+                if(!gameOverSound){
+                    sound.gameOverSound();
+                    gameOverSound = true;
+                    sound.setGameover(true);
+                }
                 gameState = overState;
                 blackScreen.fill();
                 gameOverP2.draw();
@@ -116,6 +147,7 @@ public class Game implements KeyboardHandler {
 
 
             if (gameState == playsState) {
+                gameOverSound = false;
                 // Move asteroids && bullets
                 moveObjects();
 
@@ -180,6 +212,7 @@ public class Game implements KeyboardHandler {
                     bullet.delete();
                     toRemoveA = asteroid;
                     asteroid.delete();
+                    sound.explosionSFX();
                 }
             }
         }
@@ -190,6 +223,7 @@ public class Game implements KeyboardHandler {
                     bullet.delete();
                     toRemoveA = asteroid;
                     asteroid.delete();
+                    sound.explosionSFX();
                 }
             }
         }
@@ -200,7 +234,7 @@ public class Game implements KeyboardHandler {
                 players[0].hit();
                 Thread.sleep(20);
                 bullet.delete();
-
+                sound.explosionSFX();
             }
         }
 
@@ -210,10 +244,9 @@ public class Game implements KeyboardHandler {
                 players[1].hit();
                 Thread.sleep(20);
                 bullet.delete();
-
+                sound.explosionSFX();
             }
         }
-
 
         bullets1.remove(toRemoveB1);
         bullets2.remove(toRemoveB2);
@@ -262,6 +295,7 @@ public class Game implements KeyboardHandler {
                 break;
             case KeyboardEvent.KEY_W:
                 if(bullets2.size() == 0 && gameState == playsState) {
+                    sound.shotSFX();
                     bullets2.add(new Bullets(player2ship.getX() + (player2ship.getWidth() / 2) - 5, player2ship.getY(), 10, 30, Direction.DOWN));
                     bullets2.get(0).fill();
                     bullets2.get(0).setColor(Color.RED);
@@ -269,6 +303,7 @@ public class Game implements KeyboardHandler {
                 break;
             case KeyboardEvent.KEY_SHIFT:
                 if(bullets1.size() == 0 && gameState == playsState) {
+                    sound.shotSFX();
                     bullets1.add(new Bullets(player1ship.getX() + (player1ship.getWidth() / 2) - 5, player1ship.getY() + 20, 10, 30, Direction.UP));
                     bullets1.get(0).fill();
                     bullets1.get(0).setColor(Color.CYAN);

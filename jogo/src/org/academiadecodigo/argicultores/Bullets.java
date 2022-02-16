@@ -3,12 +3,12 @@ package org.academiadecodigo.argicultores;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 
-public class Bullets extends Rectangle {
+public class Bullets extends Picture {
     private int speed = 30;
     private Direction direction;
 
-    public Bullets(double v, double v1, double v2, double v3, Direction d) {
-        super(v, v1, v2, v3);
+    public Bullets(double v, double v1, String string, Direction d) {
+        super(v, v1, string);
         direction = d;
     }
 

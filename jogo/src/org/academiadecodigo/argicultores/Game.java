@@ -1,8 +1,4 @@
 package org.academiadecodigo.argicultores;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import org.academiadecodigo.simplegraphics.graphics.Text;
@@ -19,77 +15,57 @@ public class Game implements KeyboardHandler {
     Sounds explosionFX = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/explosion.wav");
     Sounds gameOverFX = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/som.wav");
     //STATES
+    private final int menuState = -1;
     private final int playsState = 0;
     private final int overState = 1;
     private final int pauseState = 2;
     private int gameState;
-
     //SHAPES
     private final Picture background;
     private final Text gamePaused;
+    private final Text gameMenu;
     private final Text gameOverP1;
     private final Text gameOverP2;
     private final Text gameOver2;
     private final Rectangle blackScreen;
-    private Playership player1ship;
-    private Playership player2ship;
+    private final Playership player1ship;
+    private final Playership player2ship;
     public static int PADDING = 10;
-
-    ///players
-    private final Players[] players = {
-            new Players("Player 1"),
-            new Players("Player 2")
-    };
-    private Hearts[] heartsP1 = new Hearts[5];
-    private Hearts[] heartsP2 = new Hearts[5];
-    private int hearts1End = 4;
-    private int hearts2End = 4;
-
-    //asteroids
-    private final ArrayList<Asteroids> asteroids = new ArrayList<>();
-
-    //bullets
-    private final ArrayList<Bullets> bullets1 = new ArrayList<>();
-    private final ArrayList<Bullets> bullets2 = new ArrayList<>();
-    //
     public static int BACKGROUNDW;
     public static int BACKGROUNDX;
+    ///players
+    private final Players[] players = {new Players("Player 1"), new Players("Player 2")};
+    private final Hearts[] heartsP1 = new Hearts[5];
+    private final Hearts[] heartsP2 = new Hearts[5];
+    private int hearts1Start = 0;
+    private int hearts2End = 4;
+    //Object Arrays
+    private final ArrayList<Asteroids> asteroids = new ArrayList<>();
+    private final ArrayList<Bullets> bullets1 = new ArrayList<>();
+    private final ArrayList<Bullets> bullets2 = new ArrayList<>();
+
 
     public Game() {
         //// bg
-        background = new Picture(PADDING, PADDING, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/background.png");
-        background.draw();
-        gameState = playsState;
+        background = new Picture(PADDING, PADDING, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/background.png");background.draw();
+        gameState = menuState;
         BACKGROUNDW = background.getWidth();
-        BACKGROUNDX = background.getX();
         ///playerships
-        player1ship = new Playership(background.getWidth() / 2, PADDING + 11, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player2ship.png");
-        player2ship = new Playership(background.getWidth() / 2, (background.getHeight() + 1) - 50, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player1ship.png");
-        player2ship.draw();
-        player1ship.draw();
-
+        player1ship = new Playership(BACKGROUNDW / 2, PADDING + 11, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player2ship.png");player1ship.draw();
+        player2ship = new Playership(BACKGROUNDW / 2, (background.getHeight() + 1) - 50, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player1ship.png");player2ship.draw();
         //shapes
-        gamePaused = new Text((background.getWidth() / 2) - PADDING, background.getHeight() / 2, "GAME PAUSED");
-        gamePaused.setColor(Color.WHITE);
-        gamePaused.grow(50, 20);
-        gameOverP1 = new Text((background.getWidth() / 2) + 5, background.getHeight() / 2, "CYAN PLAYER WON!");
-        gameOverP1.setColor(Color.CYAN);
-        gameOverP1.grow(50, 20);
-        gameOverP2 = new Text((background.getWidth() / 2) + 8, background.getHeight() / 2, "RED PLAYER WON!");
-        gameOverP2.setColor(Color.RED);
-        gameOverP2.grow(50, 20);
-        gameOver2 = new Text((background.getWidth() / 2) - 6, gameOverP1.getY() + 50, "Press ESC to restart");
-        gameOver2.setColor(Color.WHITE);
-        gameOver2.grow(40, 10);
-        blackScreen = new Rectangle(PADDING, PADDING, background.getWidth(), background.getHeight());
+        gamePaused = new Text((BACKGROUNDW / 2) - PADDING, background.getHeight() / 2, "GAME PAUSED");gamePaused.setColor(Color.WHITE);gamePaused.grow(50, 20);
+        gameMenu = new Text((BACKGROUNDW / 2) - PADDING, background.getHeight() / 2, "P to PLAY");gameMenu.setColor(Color.PINK);gameMenu.grow(150, 120);
+        gameOverP1 = new Text((BACKGROUNDW / 2) + 5, background.getHeight() / 2, "CYAN PLAYER WON!");gameOverP1.setColor(Color.CYAN);gameOverP1.grow(50, 20);
+        gameOverP2 = new Text((BACKGROUNDW / 2) + 8, background.getHeight() / 2, "RED PLAYER WON!");gameOverP2.setColor(Color.RED);gameOverP2.grow(50, 20);
+        gameOver2 = new Text((BACKGROUNDW / 2) - 6, gameOverP1.getY() + 50, "Press ESC to restart");gameOver2.setColor(Color.WHITE);gameOver2.grow(40, 10);
+        blackScreen = new Rectangle(PADDING, PADDING, BACKGROUNDW, background.getHeight());
     }
 
     public void init() {
         bgMusic.play();
         createAsteroids();
         createHearts();
-
-
     }
 
     private void createAsteroids() {
@@ -105,13 +81,12 @@ public class Game implements KeyboardHandler {
                 direction = Direction.RIGHT;
             }
             if (direction == Direction.LEFT) {
-                x = background.getWidth();
+                x = BACKGROUNDW - 20;
             } else {
                 x = background.getX();
             }
 
-            asteroids.add(new Asteroids(x, y, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/asteroides.png", direction));
-            asteroids.get(i).draw();
+            asteroids.add(new Asteroids(x, y, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/asteroids.png", direction));asteroids.get(i).draw();
         }
     }
 
@@ -122,9 +97,8 @@ public class Game implements KeyboardHandler {
             heartsP2[i].draw();
             x +=22;
         }
-
         for (int i = 0; i < 5; i++) {
-                heartsP1[i] = new Hearts(background.getWidth() - x, background.getY() + PADDING, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/heart.png");
+                heartsP1[i] = new Hearts(BACKGROUNDW - x, background.getY() + PADDING, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/heart.png");
                 heartsP1[i].draw();
                 x -=22;
         }
@@ -134,7 +108,6 @@ public class Game implements KeyboardHandler {
     public void start() throws InterruptedException {
         boolean gameOverSound = false;
         while (true) {
-
 
             // Pause for a while
             Thread.sleep(20);
@@ -160,6 +133,10 @@ public class Game implements KeyboardHandler {
                 bgMusic.stop();
             }
 
+            if(gameState == menuState){
+                blackScreen.fill();
+                gameMenu.draw();
+            }
 
             if (gameState == playsState) {
                 gameOverSound = false;
@@ -182,7 +159,7 @@ public class Game implements KeyboardHandler {
         Bullets toremoveB1= null;
         Bullets toremoveB2 = null;
         for (Asteroids asteroid : asteroids) {
-            if (asteroid.getX() >= background.getWidth() - 50) {
+            if (asteroid.getX() >= BACKGROUNDW - 50) {
                 asteroid.setDirection(Direction.LEFT);
             }
             if (asteroid.getX() <= background.getX() + 20) {
@@ -231,6 +208,7 @@ public class Game implements KeyboardHandler {
                 }
             }
         }
+
         for (Bullets bullet : bullets2) {
             for (Asteroids asteroid : asteroids) {
                 if (bullet.intersects(asteroid)) {
@@ -262,9 +240,9 @@ public class Game implements KeyboardHandler {
                 toRemoveB2 = bullets2.get(i);
                 players[1].hit();
                 System.out.println("player2 bullet hit p1");
-                heartsP1[hearts1End].delete();
-                heartsP1[hearts1End] = null;
-                hearts1End--;
+                heartsP1[hearts1Start].delete();
+                heartsP1[hearts1Start] = null;
+                hearts1Start++;
                 Thread.sleep(20);
                 bullets2.get(i).delete();
                 explosionFX.play();
@@ -274,7 +252,6 @@ public class Game implements KeyboardHandler {
         bullets1.remove(toRemoveB1);
         bullets2.remove(toRemoveB2);
         asteroids.remove(toRemoveA);
-
 
         if (asteroids.size() == 6) {
             createAsteroids();
@@ -303,7 +280,7 @@ public class Game implements KeyboardHandler {
             }
         }
 
-        hearts1End = 4;
+        hearts1Start = 0;
         hearts2End = 4;
         createHearts();
         bgMusic.play();
@@ -317,6 +294,7 @@ public class Game implements KeyboardHandler {
         gameOverP2.delete();
         gameState = playsState;
     }
+
     private void moveObjects() {
         for (Bullets bullet : bullets1) {
             bullet.move();
@@ -349,17 +327,15 @@ public class Game implements KeyboardHandler {
             case KeyboardEvent.KEY_W:
                 if(bullets2.size() == 0 && gameState == playsState) {
                     shootFX.play();
-                    bullets2.add(new Bullets(player2ship.getX() + (player2ship.getWidth() / 2) - 5, player2ship.getY(), 10, 30, Direction.DOWN));
-                    bullets2.get(0).fill();
-                    bullets2.get(0).setColor(Color.RED);
+                    bullets2.add(new Bullets(player2ship.getX() + (player2ship.getWidth() / 2) - 5, player2ship.getY(), "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player1bala.png", Direction.DOWN));
+                    bullets2.get(0).draw();
                 }
                 break;
             case KeyboardEvent.KEY_SHIFT:
                 if(bullets1.size() == 0 && gameState == playsState) {
                     shootFX.play();
-                    bullets1.add(new Bullets(player1ship.getX() + (player1ship.getWidth() / 2) - 5, player1ship.getY() + 20, 10, 30, Direction.UP));
-                    bullets1.get(0).fill();
-                    bullets1.get(0).setColor(Color.CYAN);
+                    bullets1.add(new Bullets(player1ship.getX() + (player1ship.getWidth() / 2) - 5, player1ship.getY() + 20, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player2bala.png", Direction.UP));
+                    bullets1.get(0).draw();
                 }
                 break;
             case KeyboardEvent.KEY_P:
@@ -368,6 +344,10 @@ public class Game implements KeyboardHandler {
                     gamePaused.draw();
                 } else if (gameState == pauseState) {
                     gamePaused.delete();
+                    gameState = playsState;
+                }else if (gameState == menuState){
+                    gameMenu.delete();
+                    blackScreen.delete();
                     gameState = playsState;
                 }
                 break;
@@ -382,6 +362,5 @@ public class Game implements KeyboardHandler {
     @Override
     public void keyReleased(KeyboardEvent keyboardEvent) {
     }
-
 
 }

@@ -14,10 +14,10 @@ import java.util.ArrayList;
 
 public class Game implements KeyboardHandler {
     //Sound stuff
-    Sounds bgMusic = new Sounds("resources/bgmusic.wav");
-    Sounds shootFX = new Sounds("resources/piu.wav");
-    Sounds explosionFX = new Sounds("resources/explosion.wav");
-    Sounds gameOverFX = new Sounds("resources/som.wav");
+    Sounds bgMusic = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/bgmusic.wav");
+    Sounds shootFX = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/piu.wav");
+    Sounds explosionFX = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/explosion.wav");
+    Sounds gameOverFX = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/som.wav");
     //STATES
     private final int playsState = 0;
     private final int overState = 1;
@@ -110,7 +110,7 @@ public class Game implements KeyboardHandler {
                 x = background.getX();
             }
 
-            asteroids.add(new Asteroids(x, y, "resources/asteroides.png", direction));
+            asteroids.add(new Asteroids(x, y, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/asteroides.png", direction));
             asteroids.get(i).draw();
         }
     }
@@ -147,6 +147,7 @@ public class Game implements KeyboardHandler {
                 blackScreen.fill();
                 gameOverP1.draw();
                 gameOver2.draw();
+                bgMusic.stop();
             }else if(players[1].isDead()){
                 if(!gameOverSound){
                     gameOverFX.play();
@@ -156,6 +157,7 @@ public class Game implements KeyboardHandler {
                 blackScreen.fill();
                 gameOverP2.draw();
                 gameOver2.draw();
+                bgMusic.stop();
             }
 
 
@@ -304,6 +306,7 @@ public class Game implements KeyboardHandler {
         hearts1End = 4;
         hearts2End = 4;
         createHearts();
+        bgMusic.play();
         players[0].setDead(false);
         players[0].resetHp();
         players[1].setDead(false);

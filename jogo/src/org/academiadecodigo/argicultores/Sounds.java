@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Sounds {
+    private Clip clip = null;
     private String path;
     public Sounds(String path){
         this.path = path;
@@ -23,7 +24,7 @@ public class Sounds {
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
-            Clip clip = null;
+            //Clip clip = null;
             try {
                 clip = AudioSystem.getClip();
             } catch (LineUnavailableException lineUnavailableException) {
@@ -43,6 +44,10 @@ public class Sounds {
     } catch (LineUnavailableException e) {
         e.printStackTrace();
     }
+    }
+
+    public void stop(){
+        clip.stop();
     }
 
 }

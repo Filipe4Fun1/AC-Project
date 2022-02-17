@@ -1,4 +1,5 @@
 package org.academiadecodigo.argicultores;
+import org.academiadecodigo.argicultores.Objects.*;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import org.academiadecodigo.simplegraphics.graphics.Text;
@@ -46,6 +47,8 @@ public class Game implements KeyboardHandler {
 
 
     public Game() {
+        //Keyboard
+        new Players.Pkeyboard(this);
         //// bg
         background = new Picture(PADDING, PADDING, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/background.png");background.draw();
         gameState = menuState;
@@ -308,6 +311,7 @@ public class Game implements KeyboardHandler {
         player1ship.move();
         player2ship.move();
     }
+
 
     @Override
     public void keyPressed(KeyboardEvent keyboardEvent) {

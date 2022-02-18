@@ -9,6 +9,7 @@ public class Players{
     private String name;
     private int hitpoints = 5;
     private boolean isDead;
+    private boolean powerShot= false;
 
     public Players(String name){
         this.name = name;
@@ -35,6 +36,13 @@ public class Players{
         System.out.println(name + " got hit! Hitpoints left: " + hitpoints);
     }
 
+    public void setPowerShot(boolean powerShot) {
+        this.powerShot = powerShot;
+    }
+
+    public boolean isPowerShot() {
+        return powerShot;
+    }
 
     public static class Pkeyboard extends Keyboard {
         public Pkeyboard(KeyboardHandler keyboardHandler) {

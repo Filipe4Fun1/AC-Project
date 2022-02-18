@@ -88,8 +88,11 @@ public class Game implements KeyboardHandler {
             } else {
                 x = background.getX();
             }
-
-            asteroids.add(new Asteroids(x, y, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/asteroids.png", direction));asteroids.get(i).draw();
+            double rand = Math.random();
+            if(rand < 0.5){
+            asteroids.add(new Asteroids(x, y, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/alien.png", direction, "Ship"));asteroids.get(i).draw();
+            }else
+                asteroids.add(new Asteroids(x, y, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/asteroids.png", direction, "Normal"));asteroids.get(i).draw();
         }
     }
 
@@ -203,6 +206,9 @@ public class Game implements KeyboardHandler {
         for (Bullets bullet : bullets1) {
             for (Asteroids asteroid : asteroids) {
                 if (bullet.intersects(asteroid)) {
+                    if(asteroid.getType() == "Ship"){
+                        players[0].setPowerShot(true);
+                    }
                     toRemoveB1 = bullet;
                     bullet.delete();
                     toRemoveA = asteroid;
@@ -215,6 +221,9 @@ public class Game implements KeyboardHandler {
         for (Bullets bullet : bullets2) {
             for (Asteroids asteroid : asteroids) {
                 if (bullet.intersects(asteroid)) {
+                    if(asteroid.getType() == "Ship"){
+                        players[1].setPowerShot(true);
+                    }
                     toRemoveB2 = bullet;
                     bullet.delete();
                     toRemoveA = asteroid;
@@ -331,14 +340,14 @@ public class Game implements KeyboardHandler {
             case KeyboardEvent.KEY_W:
                 if(bullets2.size() == 0 && gameState == playsState) {
                     shootFX.play();
-                    bullets2.add(new Bullets(player2ship.getX() + (player2ship.getWidth() / 2) - 5, player2ship.getY(), "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player1bala.png", Direction.DOWN));
+                    bullets2.add(new Bullets(player2ship.getX() + (player2ship.getWidth() / 2) - 5, player2ship.getY(), "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player1bala.png", Direction.DOWN, "Normal"));
                     bullets2.get(0).draw();
                 }
                 break;
             case KeyboardEvent.KEY_SHIFT:
                 if(bullets1.size() == 0 && gameState == playsState) {
                     shootFX.play();
-                    bullets1.add(new Bullets(player1ship.getX() + (player1ship.getWidth() / 2) - 5, player1ship.getY() + 20, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player2bala.png", Direction.UP));
+                    bullets1.add(new Bullets(player1ship.getX() + (player1ship.getWidth() / 2) - 5, player1ship.getY() + 20, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player2bala.png", Direction.UP, "Normal"));
                     bullets1.get(0).draw();
                 }
                 break;

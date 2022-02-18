@@ -15,6 +15,7 @@ public class Game implements KeyboardHandler {
     Sounds shootFX = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/piu.wav");
     Sounds explosionFX = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/explosion.wav");
     Sounds gameOverFX = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/som.wav");
+    Sounds shotFX = new Sounds("/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/getHit.wav");
     //STATES
     private final int menuState = -1;
     private final int playsState = 0;
@@ -24,7 +25,7 @@ public class Game implements KeyboardHandler {
     //SHAPES
     private final Picture background;
     private final Text gamePaused;
-    private final Text gameMenu;
+    private final Picture gameMenu;
     private final Text gameOverP1;
     private final Text gameOverP2;
     private final Text gameOver2;
@@ -58,7 +59,7 @@ public class Game implements KeyboardHandler {
         player2ship = new Playership(BACKGROUNDW / 2, (background.getHeight() + 1) - 50, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player1ship.png");player2ship.draw();
         //shapes
         gamePaused = new Text((BACKGROUNDW / 2) - PADDING, background.getHeight() / 2, "GAME PAUSED");gamePaused.setColor(Color.WHITE);gamePaused.grow(50, 20);
-        gameMenu = new Text((BACKGROUNDW / 2) - PADDING, background.getHeight() / 2, "P to PLAY");gameMenu.setColor(Color.PINK);gameMenu.grow(150, 120);
+        gameMenu = new Picture(PADDING, PADDING, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/startmenu.png");
         gameOverP1 = new Text((BACKGROUNDW / 2) + 5, background.getHeight() / 2, "CYAN PLAYER WON!");gameOverP1.setColor(Color.CYAN);gameOverP1.grow(50, 20);
         gameOverP2 = new Text((BACKGROUNDW / 2) + 8, background.getHeight() / 2, "RED PLAYER WON!");gameOverP2.setColor(Color.RED);gameOverP2.grow(50, 20);
         gameOver2 = new Text((BACKGROUNDW / 2) - 6, gameOverP1.getY() + 50, "Press ESC to restart");gameOver2.setColor(Color.WHITE);gameOver2.grow(40, 10);
@@ -89,7 +90,7 @@ public class Game implements KeyboardHandler {
                 x = background.getX();
             }
             double rand = Math.random();
-            if(rand < 0.5){
+            if(rand < 0.03){
             asteroids.add(new Asteroids(x, y, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/alien.png", direction, "Ship"));asteroids.get(i).draw();
             }else
                 asteroids.add(new Asteroids(x, y, "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/asteroids.png", direction, "Normal"));asteroids.get(i).draw();
@@ -126,7 +127,6 @@ public class Game implements KeyboardHandler {
                 blackScreen.fill();
                 gameOverP1.draw();
                 gameOver2.draw();
-                bgMusic.stop();
             }else if(players[1].isDead()){
                 if(!gameOverSound){
                     gameOverFX.play();
@@ -136,7 +136,6 @@ public class Game implements KeyboardHandler {
                 blackScreen.fill();
                 gameOverP2.draw();
                 gameOver2.draw();
-                bgMusic.stop();
             }
 
             if(gameState == menuState){
@@ -243,7 +242,7 @@ public class Game implements KeyboardHandler {
                 hearts2End--;
                 Thread.sleep(20);
                 bullets1.get(i).delete();
-                explosionFX.play();
+                shotFX.play();
             }
         }
 
@@ -257,7 +256,7 @@ public class Game implements KeyboardHandler {
                 hearts1Start++;
                 Thread.sleep(20);
                 bullets2.get(i).delete();
-                explosionFX.play();
+                shotFX.play();
             }
         }
 
@@ -295,7 +294,6 @@ public class Game implements KeyboardHandler {
         hearts1Start = 0;
         hearts2End = 4;
         createHearts();
-        bgMusic.play();
         players[0].setDead(false);
         players[0].resetHp();
         players[1].setDead(false);
@@ -339,9 +337,9 @@ public class Game implements KeyboardHandler {
                 break;
             case KeyboardEvent.KEY_W:
                 if(bullets2.size() == 0 && gameState == playsState) {
-                    shootFX.play();
-                    bullets2.add(new Bullets(player2ship.getX() + (player2ship.getWidth() / 2) - 5, player2ship.getY(), "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player1bala.png", Direction.DOWN, "Normal"));
-                    bullets2.get(0).draw();
+                        shootFX.play();
+                        bullets2.add(new Bullets(player2ship.getX() + (player2ship.getWidth() / 2) - 5, player2ship.getY(), "/Users/codecadet/Documents/GitHub/AC-Project/jogo/resources/player1bala.png", Direction.DOWN, "Normal"));
+                        bullets2.get(0).draw();
                 }
                 break;
             case KeyboardEvent.KEY_SHIFT:

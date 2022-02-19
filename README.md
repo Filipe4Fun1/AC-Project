@@ -1,18 +1,8 @@
 <div id="top"></div>
 
 
-<!-->
-***[![Contributors][contributors-shield]][contributors-url]
-***[![Forks][forks-shield]][forks-url]
-***[![Stargazers][stars-shield]][stars-url]
-***[![Issues][issues-shield]][issues-url]
-***[![MIT License][license-shield]][license-url]
-***[![LinkedIn][linkedin-shield]][linkedin-url]
--->
-
-
 <!-- PROJECT LOGO -->
-<br />
+<br/>
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="jogo/resources/startmenu.png" alt="Logo" width="900" height="800">
@@ -27,7 +17,7 @@
     <a href="https://github.com/Filipe4Fun1/AC-Project/raw/main/BlastersV1.zip"><strong>Download the Game »</strong></a>
     <a href="https://github.com/Filipe4Fun1/AC-Project/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Filipe4Fun1/AC-Project/commits/main">View Change Logd</a>
+    <a href="https://github.com/Filipe4Fun1/AC-Project/commits/main">View Change Logs</a>
   </p>
 </div>
 

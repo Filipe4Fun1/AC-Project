@@ -31,8 +31,7 @@ public class Sounds {
                 lineUnavailableException.printStackTrace();
             }
             clip.open(audioInput);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            if(path == "resources/bgmusic.wav") {
+            if(path == "./resources/bgmusic.wav") {
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
             clip.start();

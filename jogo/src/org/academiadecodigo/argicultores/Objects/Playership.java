@@ -4,7 +4,6 @@ import org.academiadecodigo.argicultores.Game;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 
 public class Playership extends Picture {
-    private int speed;
     private Direction direction;
 
     public Playership(double var1, double var3, String var5) {

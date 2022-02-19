@@ -5,12 +5,10 @@ import org.academiadecodigo.simplegraphics.pictures.Picture;
 public class Bullets extends Picture {
     private int speed = 30;
     private Direction direction;
-    private String type;
 
-    public Bullets(double v, double v1, String string, Direction d, String type) {
+    public Bullets(double v, double v1, String string, Direction d) {
         super(v, v1, string);
         direction = d;
-        this.type = type;
     }
 
 
@@ -25,9 +23,6 @@ public class Bullets extends Picture {
         }
     }
 
-    public String getType() {
-        return type;
-    }
 
     public boolean intersects(Picture pic) {
         int tw = getWidth();

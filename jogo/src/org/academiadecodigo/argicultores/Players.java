@@ -48,6 +48,16 @@ public class Players{
         public Pkeyboard(KeyboardHandler keyboardHandler) {
             super(keyboardHandler);
 
+            KeyboardEvent setaDown = new KeyboardEvent();
+            setaDown.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+            setaDown.setKey(KeyboardEvent.KEY_DOWN);
+            this.addEventListener(setaDown);
+
+            KeyboardEvent setaUp= new KeyboardEvent();
+            setaUp.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+            setaUp.setKey(KeyboardEvent.KEY_UP);
+            this.addEventListener(setaUp);
+
             KeyboardEvent setaRight = new KeyboardEvent();
             setaRight.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
             setaRight.setKey(KeyboardEvent.KEY_RIGHT);
@@ -80,8 +90,13 @@ public class Players{
 
             KeyboardEvent pKey= new KeyboardEvent();
             pKey.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-            pKey.setKey(KeyboardEvent.KEY_P);
+            pKey.setKey(KeyboardEvent.KEY_ENTER);
             this.addEventListener(pKey);
+
+            KeyboardEvent mKey= new KeyboardEvent();
+            mKey.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+            mKey.setKey(KeyboardEvent.KEY_M);
+            this.addEventListener(mKey);
 
             KeyboardEvent escKey= new KeyboardEvent();
             escKey.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);

@@ -1,29 +1,14 @@
 <div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
+
+
+<!-->
+***[![Contributors][contributors-shield]][contributors-url]
+***[![Forks][forks-shield]][forks-url]
+***[![Stargazers][stars-shield]][stars-url]
+***[![Issues][issues-shield]][issues-url]
+***[![MIT License][license-shield]][license-url]
+***[![LinkedIn][linkedin-shield]][linkedin-url]
 -->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
 
 
 <!-- PROJECT LOGO -->
@@ -36,12 +21,13 @@
   <h3 align="center">Blasters Project</h3>
 
   <p align="center">
-    2D Java game!
+    Live the story of a space blaster, the hunter for precious materials found in alien planets and asteroids, but be careful... There might be other blasters around!
+    This is a local 2D java PvP game.   
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
+    <a href="https://github.com/Filipe4Fun1/AC-Project/raw/main/BlastersV1.zip"><strong>Download the Game »</strong></a>
+    <a href="https://github.com/Filipe4Fun1/AC-Project/issues">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    <a href="https://github.com/Filipe4Fun1/AC-Project/commits/main">View Change Logd</a>
   </p>
 </div>
 
@@ -51,8 +37,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-This game was developed in 7 days, during a coding bootcamp.
+This game was developed in 7 nights, during a coding bootcamp.
 
 

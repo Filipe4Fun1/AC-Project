@@ -13,7 +13,7 @@
     <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="jogo/resources/startmenu.png" alt="Logo" width="900" height="800">
   </a>
-    <a href="https://github.com/Filipe4Fun1/AC-Project/raw/main/BlastersV1.zip"><strong>Download the Game ·</strong></a>
+    <a href="https://github.com/Filipe4Fun1/AC-Project/raw/main/Blasters.jar"><strong>Download the Game ·</strong></a>
     <a href="https://github.com/Filipe4Fun1/AC-Project/issues">Report Bug</a>
     ·
     <a href="https://github.com/Filipe4Fun1/AC-Project/commits/main">View Change Logs</a>

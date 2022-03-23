@@ -26,6 +26,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This game was developed in 5 nights, during a coding bootcamp.
+This game was developed in 7 nights, during a coding bootcamp.
 
 
